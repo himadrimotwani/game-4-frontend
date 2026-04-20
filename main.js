@@ -25,26 +25,12 @@
 // ================================
 // Global State Variables
 // ================================
-
 let sessionId = null;     // Current game session_id
 let currentState = null;  // Latest GameStateResponse from backend
 
 document.addEventListener("DOMContentLoaded", () => {
-    const BASE_URL = "https://game-4-backend.onrender.com";
+    const BASE_URL = "https://backend-last-1.onrender.com";
 
-    function switchToStudentTab() {
-        const tabButtons = document.querySelectorAll(".tab-btn");
-        const tabContents = document.querySelectorAll(".tab-content");
-
-        tabButtons.forEach(b => b.classList.remove("active"));
-        tabContents.forEach(c => c.classList.remove("active"));
-
-        const studentBtn = document.getElementById("student-tab-btn");
-        const studentTab = document.getElementById("student-tab");
-
-        if (studentBtn) studentBtn.classList.add("active");
-        if (studentTab) studentTab.classList.add("active");
-    }
     // ================================
     // DOM Element References
     // ================================
@@ -568,7 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!phaseBannerEl) return;
 
         const phase = computePhase(currentState);
-        const startGameBtn = document.getElementById("start-game-btn");
+
         const negotiateForm = document.getElementById("negotiate-form");
         const orderForm = document.getElementById("order-form");
 
@@ -586,10 +572,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     orderButton.disabled = true;
                     orderButton.title = "Start a game and negotiate a contract before ordering.";
                 }
-                if (startGameBtn) {
-                    startGameBtn.disabled = false;
-                    startGameBtn.title = "Start a new game.";
-                }
                 break;
             case "needs_contract":
                 phaseBannerEl.textContent = "No active contract. Negotiate terms before ordering.";
@@ -600,10 +582,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (orderButton) {
                     orderButton.disabled = true;
                     orderButton.title = "You must have an active contract before placing orders.";
-                }
-                if (startGameBtn) {
-                    startGameBtn.disabled = true;
-                    startGameBtn.title = "Game already started.";
                 }
                 break;
             case "active_contract":
@@ -616,10 +594,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     orderButton.disabled = false;
                     orderButton.title = "Enter Q for this round and place your order.";
                 }
-                 if (startGameBtn) {
-                    startGameBtn.disabled = true;
-                    startGameBtn.title = "Game already in progress.";
-                }
                 break;
             case "game_over":
                 phaseBannerEl.textContent = "Game is over. Start a new game to play again.";
@@ -630,10 +604,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (orderButton) {
                     orderButton.disabled = true;
                     orderButton.title = "Game is over. Start a new game to place orders.";
-                }
-                if (startGameBtn) {
-                    startGameBtn.disabled = false;
-                    startGameBtn.title = "Start a new game.";
                 }
                 break;
             default:
@@ -1011,9 +981,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     `Game started (session ${sessionId.slice(0, 8)}..., rounds=${rounds}, method=${demandMethod}).`,
                     "success"
                 );
-                
                 renderGameState();
-                
             } catch (err) {
                 console.error(err);
                 if (gameStateOutput) {
